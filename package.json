@@ -1,0 +1,33 @@
+{
+  "name": "spectra-capture",
+  "version": "0.7.1",
+  "private": true,
+  "description": "Spectra Capture: a local Chromium Manifest V3 extension that saves page screenshots at any viewport size, aspect ratio, and pixel density.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "engines": {
+    "bun": ">=1.2.0"
+  },
+  "scripts": {
+    "build": "bun scripts/build.ts",
+    "build:user": "bun scripts/build.ts && bun scripts/validate.ts",
+    "build:dev": "bun run check && bun run validate && bun run e2e:pw && bun run e2e:pw:popup && bun run e2e:pw:guide && bun run e2e:pw:picker && bun run screenshots:pw && bun run build",
+    "test": "bun test",
+    "typecheck": "bun x tsc --noEmit",
+    "check": "bun run typecheck && bun test && bun run build",
+    "validate": "bun scripts/validate.ts",
+    "e2e": "bun development/tests/e2e/protocol.e2e.ts && bun development/tests/e2e/popup-behaviour.e2e.ts && bun development/tests/e2e/dropdown.e2e.ts",
+    "snapshots": "bun development/tests/e2e/ui-snapshots.ts",
+    "e2e:pw": "bun development/tests/playwright/run.ts",
+    "e2e:pw:popup": "bun development/tests/playwright/popup.ts",
+    "e2e:pw:guide": "bun development/tests/playwright/guide.ts",
+    "e2e:pw:picker": "bun development/tests/playwright/picker-cleanup.ts",
+    "screenshots:pw": "bun development/tests/playwright/screenshots.ts"
+  },
+  "devDependencies": {
+    "@types/bun": "1.4.4",
+    "@types/chrome": "0.3.7",
+    "playwright": "1.65.1",
+    "typescript": "5.9.3"
+  }
+}

@@ -1,0 +1,19 @@
+/* Custom button layer. Colours, borders and shadows come from the existing design classes;
+   this file only adds the shared press plate, icon slot and state plumbing. */
+
+.ui-btn { position: relative; isolation: isolate; }
+.ui-btn__press {
+  position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: var(--accent); opacity: 0; transform: scaleX(0); transform-origin: left;
+  transition: opacity .18s var(--ease), transform .18s var(--ease);
+}
+.ui-btn:not(:disabled):hover .ui-btn__press { opacity: .08; transform: scaleX(1); }
+.tab .ui-btn__press { opacity: 0 !important; }
+.ui-btn:not(:disabled):active .ui-btn__press { opacity: .25; transform: scaleX(1); }
+.ui-btn__icon { display: inline-grid; place-items: center; flex: none; }
+.ui-btn:disabled { opacity: .45; cursor: not-allowed; }
+
+/* The native button remains the fallback: these rules only enhance, never replace it. */
+@supports not (selector(:focus-visible)) {
+  .ui-btn:focus { outline: 2px solid var(--indigo); outline-offset: 2px; }
+}

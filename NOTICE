@@ -1,0 +1,37 @@
+Spectra Capture
+Copyright 2026 BayJoi
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this project except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+This project was previously distributed under the MIT License. Version 0.6.0
+relicenses the original work under Apache 2.0. All third-party components keep
+their own licences, listed in THIRD_PARTY_LICENSES.txt. The full text of each
+applicable third-party licence is included in the directories where those
+components are distributed.
+
+Attribution
+
+- Inter 4.001 variable font (Latin subset), The Inter Project Authors.
+  SIL Open Font License 1.1. Full text: licenses/INTER_OFL-1.1.txt.
+  The font file is included in every built extension under fonts/.
+
+- The Spectra mark and mascot SVGs are original artwork created for this project.
+
+- Design and motion ideas were informed by publicly available writing and
+  galleries (Japanese minimal UI writing, neo-brutalist/Swiss UI writing,
+  radiant-shaders.com, reactbits.dev and motion.dev). No source code, images
+  or proprietary text from those projects is included. React Bits is
+  MIT + Commons Clause; it is acknowledged as inspiration only, never copied.
+
+This program was written entirely by AI assistants, with no human-written
+source code. It was made for fun and as a trial. See README.md.

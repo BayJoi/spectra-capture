@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en" data-theme="light" data-motion="on">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Spectra Capture · Copy</title>
+    <link rel="stylesheet" href="tokens.css" />
+    <link rel="stylesheet" href="button.css" />
+    <link rel="stylesheet" href="copy.css" />
+    <link rel="stylesheet" href="motion.css" />
+  </head>
+  <body>
+    <main class="frame" id="frame" data-enter>
+      <header class="masthead">
+        <span class="mark"><img src="brand/spectra-mark.svg" data-brand="spectra-mark" alt="" width="34" height="34" /></span>
+        <div class="heading">
+          <h1 id="title">Copy image</h1>
+          <p class="sub">Send the capture to your clipboard</p>
+        </div>
+        <span class="seal" aria-hidden="true">COPY</span>
+      </header>
+
+      <section class="preview" aria-label="Image preview">
+        <div class="preview-inner" id="preview-inner">
+          <img id="thumb" alt="Preview of the captured screenshot" />
+          <p class="preview-meta" id="preview-meta"></p>
+        </div>
+      </section>
+
+      <section class="status-panel" id="status-panel" data-state="loading">
+        <span class="status-icon" aria-hidden="true">
+          <svg class="i-spinner" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" /></svg>
+          <svg class="i-tick" viewBox="0 0 16 16"><polyline points="2,8.5 6,12.5 14,3.5" /></svg>
+          <svg class="i-cross" viewBox="0 0 16 16"><path d="M3 3l10 10M13 3L3 13" /></svg>
+        </span>
+        <div class="status-copy">
+          <p class="status-title" id="status-title">Copying…</p>
+          <p class="status-detail" id="status-detail">Reading the captured image</p>
+        </div>
+      </section>
+      <span class="sr-only" id="status-live" role="status" aria-live="polite"></span>
+
+      <div class="options">
+        <label class="check">
+          <input id="keep-open" type="checkbox" />
+          <span>Keep this tab open</span>
+        </label>
+        <p class="hint">This tab closes automatically once the image is copied.</p>
+      </div>
+
+      <footer class="actions">
+        <button type="button" class="primary" id="retry-copy" disabled>
+          <span class="btn-label">Copy again</span>
+        </button>
+        <button type="button" class="ghost" id="download" disabled>Save instead</button>
+      </footer>
+    </main>
+    <script type="module" src="copy.js"></script>
+  </body>
+</html>

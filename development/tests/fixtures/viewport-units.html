@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Fixture: viewport units</title>
+<style>
+body{margin:0;font-family:system-ui,sans-serif;background:#fbf7ee;color:#3b2415}
+.hero{height:100vh;display:flex;align-items:center;justify-content:center;background:#3b2415;color:#fbf7ee;font-size:6vw;font-weight:900}
+.card{width:50vw;height:30vh;margin:24px auto;background:#f4ebd8;border:1.5px solid #3b2415;border-radius:18px;display:flex;align-items:center;justify-content:center;font-weight:800}
+@media (max-width: 768px){ .card{width:90vw} }
+</style>
+</head>
+<body>
+<!-- 100vh and vw depend on the emulated viewport. Full-page capture keeps the viewport height, so 100vh stays the requested height. -->
+<div class="hero">100vh hero</div>
+<div class="card">50vw × 30vh card</div>
+<div class="card">Narrows below 768 px</div>
+</body>
+</html>

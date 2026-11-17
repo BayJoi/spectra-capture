@@ -1,0 +1,133 @@
+/* Guide page. Colours, the one typeface and the sharp rule are in tokens.css. */
+body { min-height: 100vh; font-size: 13px; line-height: 1.7; background-color: var(--bg); background-image: linear-gradient(to right, var(--lattice) 1px, transparent 1px), linear-gradient(to bottom, var(--lattice) 1px, transparent 1px); background-size: 56px 56px; }
+
+.reading-bar { position: fixed; top: 0; left: 0; right: 0; height: 4px; z-index: 10; background: var(--accent); transform-origin: left; transform: scaleX(0); }
+
+.topbar {
+  position: sticky; top: 0; z-index: 5; display: flex; align-items: center; justify-content: space-between;
+  height: 64px; padding: 0 var(--s5); border-bottom: 2px solid var(--line); background: var(--paper);
+}
+.brand { display: flex; align-items: center; gap: var(--s3); color: var(--ink); text-decoration: none; font-size: 13px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+.brand em { font-style: normal; font-weight: 300; color: var(--muted); }
+.brand img { display: block; }
+
+.theme-switch {
+  position: relative; display: grid; grid-template-columns: 1fr 1fr; width: 120px; height: 32px; padding: 0; overflow: hidden;
+  border: 2px solid var(--line); background: var(--field); cursor: pointer;
+  box-shadow: 2px 2px 0 var(--line);
+  transition: transform .12s var(--ease), box-shadow .12s var(--ease);
+}
+.theme-switch:hover { transform: translate(-1px, -1px); box-shadow: 3px 3px 0 var(--line); }
+.theme-switch:active { transform: translate(2px, 2px); box-shadow: 0 0 0 var(--line); }
+/* Same clean sliding highlight as the page-tab indicator. */
+.theme-switch .ts-thumb {
+  position: absolute; top: 0; bottom: 0; left: 0; width: 50%; background: var(--btn);
+  transition: transform .45s var(--ease);
+}
+.theme-switch[aria-checked="true"] .ts-thumb { transform: translateX(100%); }
+.theme-switch .ts-opt {
+  position: relative; z-index: 1; display: grid; place-items: center; font-size: 10px;
+  font-weight: 500; letter-spacing: .1em; text-transform: uppercase;
+  transition: color .3s ease;
+}
+.theme-switch[aria-checked="false"] .ts-opt:nth-child(1),
+.theme-switch[aria-checked="true"] .ts-opt:nth-child(2) { color: var(--on-btn); }
+.theme-switch:active { transform: translate(2px, 2px); }
+
+.layout { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 56px; max-width: 1080px; margin: 0 auto; padding: 44px var(--s5) 80px; }
+
+.toc { position: sticky; top: 100px; align-self: start; }
+.toc-title { margin: 0 0 var(--s3); font-size: 10px; font-weight: 500; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+.toc nav { display: grid; border-left: 2px solid var(--line); }
+.toc a {
+  position: relative; display: flex; align-items: center; gap: var(--s3); padding: 7px var(--s3) 7px var(--s4);
+  color: var(--muted); text-decoration: none; font-size: 12px; transition: color .2s ease, padding .3s var(--ease), background-color .2s ease;
+}
+.toc a::before { content: ""; position: absolute; left: -2px; top: 0; bottom: 0; width: 3px; background: var(--accent); transform: scaleY(0); transition: transform .3s var(--ease); }
+.toc a b { font-size: 10px; font-weight: 700; color: var(--accent-ink); }
+.toc a:hover { color: var(--ink); background: var(--select-hover); }
+.toc a[aria-current="true"] {
+  color: var(--ink); font-weight: 700; padding-left: var(--s5);
+  background: var(--select); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 35%, transparent);
+}
+.toc a[aria-current="true"]::before { transform: scaleY(1); }
+.toc a[aria-current="true"] b { color: var(--accent-ink); }
+
+.content { min-width: 0; }
+.hero { display: grid; grid-template-columns: 200px 1fr; gap: 40px; align-items: center; padding-bottom: 48px; border-bottom: 2px solid var(--line); }
+/* A solid backing tile keeps the lattice and dark page background out of the mascot's transparent corners. */
+.hero-logo {
+  width: 200px; height: auto; padding: 8px; display: block;
+  background: var(--paper); border: 2px solid var(--line); box-shadow: 5px 5px 0 var(--line);
+}
+@keyframes float { from { transform: translateY(0); } to { transform: translateY(-8px); } }
+.eyebrow { margin: 0 0 var(--s2); font-size: 10px; font-weight: 500; letter-spacing: .16em; text-transform: uppercase; color: var(--accent-ink); }
+.hero h1 { margin: 0 0 var(--s3); font-size: 30px; font-weight: 700; line-height: 1.2; letter-spacing: -.01em; }
+.lead { margin: 0 0 var(--s4); font-size: 15px; font-weight: 300; color: var(--muted); }
+.cta {
+  /* Keeps the shimmer sweep clipped inside the button instead of drifting across the page. */
+  overflow: hidden;
+  display: inline-flex; align-items: center; height: 42px; padding: 0 var(--s5);
+  border: 2px solid var(--line); background: var(--btn); color: var(--on-btn); text-decoration: none;
+  font-size: 12px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; box-shadow: 4px 4px 0 var(--accent);
+  transition: transform .12s var(--ease), box-shadow .12s var(--ease);
+}
+.cta:hover { transform: translate(-1px, -1px); box-shadow: 5px 5px 0 var(--accent); }
+.cta:active { transform: translate(4px, 4px); box-shadow: 0 0 0 var(--accent); }
+
+.guide { padding: 44px 0; border-bottom: 1px dashed var(--muted); }
+.guide h2 { display: flex; align-items: center; gap: var(--s3); margin: 0 0 var(--s4); font-size: 20px; font-weight: 700; letter-spacing: -.005em; }
+.seal {
+  display: inline-grid; place-items: center; flex: none; width: 40px; height: 34px;
+  border: 2px solid var(--accent); background: var(--accent); color: var(--on-accent);
+  font-size: 12px; font-weight: 700; letter-spacing: .04em;
+}
+.guide p { margin: 0 0 var(--s3); }
+/* Inline code: no box, no forced line breaks — just a coloured, unbreakable token. */
+code { color: var(--accent-ink); font-size: .92em; font-weight: 700; white-space: nowrap; }
+strong { font-weight: 700; }
+em { font-style: normal; font-weight: 700; }
+
+.steps { position: relative; margin: 0 0 var(--s4); padding: 0; list-style: none; counter-reset: step; }
+.steps::before {
+  content: ""; position: absolute; left: 15px; top: 16px; bottom: 16px; width: 2px; background: var(--line);
+}
+.steps li {
+  position: relative; display: grid; grid-template-columns: 32px 1fr; align-items: center;
+  gap: 14px; min-height: 32px; margin: 0 0 12px; padding: 0; text-wrap: pretty;
+}
+.steps li:last-child { margin-bottom: 0; }
+.steps li > span { min-width: 0; }
+.steps li::before {
+  counter-increment: step; content: counter(step, decimal-leading-zero);
+  position: relative; z-index: 1; display: grid; place-items: center; width: 32px; height: 32px;
+  border: 2px solid var(--line); background: var(--btn); color: var(--on-btn);
+  box-shadow: 2px 2px 0 var(--line); font-size: 11px; font-weight: 700;
+}
+
+.pages { display: grid; gap: var(--s2); margin: 0 0 var(--s4); }
+.pages div { display: grid; grid-template-columns: 110px 1fr; gap: var(--s3); padding: var(--s3) var(--s4); border: 2px solid var(--line); background: var(--field); box-shadow: 3px 3px 0 var(--line); }
+.pages dt { font-weight: 700; }
+.pages dd { margin: 0; color: var(--muted); }
+
+.note { padding: var(--s3) var(--s4); border-left: 4px solid var(--accent); background: color-mix(in srgb, var(--accent) 8%, transparent); font-size: 12.5px; }
+
+.shot-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s3); margin-top: var(--s4); margin-bottom: var(--s4); }
+.shot-grid figure, .shot-wide { margin: 0; padding: var(--s2); border: 2px solid var(--line); background: var(--field); box-shadow: 3px 3px 0 var(--line); }
+.shot-grid img, .shot-wide img { display: block; width: 100%; height: auto; image-rendering: auto; transition: transform .45s var(--ease); }
+.shot-grid figure:hover img, .shot-wide:hover img { transform: scale(1.025); }
+.shot-grid figcaption, .shot-wide figcaption { margin-top: var(--s2); font-size: 10px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.shot-wide { display: inline-block; margin-top: var(--s4); }
+.shot-wide img { max-width: 380px; }
+
+.foot { display: flex; align-items: center; justify-content: space-between; gap: var(--s4); padding-top: var(--s5); font-size: 12px; color: var(--muted); }
+.foot a { color: var(--ink); font-weight: 700; text-decoration: none; }
+.foot p { margin: 0; font-weight: 300; }
+
+@media (max-width: 820px) {
+  .layout { grid-template-columns: 1fr; gap: var(--s4); }
+  .toc { position: static; }
+  .toc nav { grid-template-columns: 1fr 1fr; border-left: 0; }
+  .hero { grid-template-columns: 1fr; }
+  .hero-logo { width: 140px; }
+}

@@ -1,0 +1,371 @@
+/* Popup layout. Colours, the one typeface and the sharp rule are in tokens.css. */
+body { width: 380px; height: 600px; overflow: hidden; position: relative; font-size: 12px; line-height: 1.4; }
+
+.backdrop { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+
+/* The frame: a shoji-style lattice on washi paper, a thick ink border and a hard shadow. */
+.frame {
+  position: relative; z-index: 1; display: flex; flex-direction: column;
+  height: calc(100% - 16px); margin: 8px; overflow: hidden;
+  border: 2px solid var(--line);
+  background-color: color-mix(in srgb, var(--paper) 94%, transparent);
+  background-image:
+    linear-gradient(to right, var(--lattice) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--lattice) 1px, transparent 1px);
+  background-size: 48px 48px;
+  box-shadow: 6px 6px 0 var(--line);
+}
+.frame::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: var(--accent); z-index: 2; }
+.shutter { position: absolute; inset: 0; z-index: 5; display: grid; grid-template-rows: 1fr 1fr; opacity: 0; pointer-events: none; }
+.shutter span { background: var(--line); transform: scaleY(0); }
+.shutter span:first-child { transform-origin: top; }
+.shutter span:last-child { transform-origin: bottom; }
+.frame.shoot > .shutter { animation: shutter-fade .6s ease both; }
+.frame.shoot > .shutter span { animation: blade .6s cubic-bezier(.7, 0, .3, 1) both; }
+@keyframes shutter-fade { 0%, 90% { opacity: 1; } 100% { opacity: 0; } }
+@keyframes blade { 0% { transform: scaleY(0); } 45%, 60% { transform: scaleY(1); } 100% { transform: scaleY(0); } }
+
+/* Header: 60 px, one row. */
+.masthead { flex: none; display: flex; align-items: center; gap: var(--s2); height: 60px; padding: 0 var(--s4); border-bottom: 2px solid var(--line); animation: fade-in .5s var(--ease) both; }
+.mark { flex: none; width: 34px; height: 34px; }
+.mark img { display: block; width: 100%; height: 100%; }
+h1 { flex: none; width: 104px; margin: 0; font-size: 13px; font-weight: 700; line-height: 1.15; letter-spacing: .08em; text-transform: uppercase; }
+.tools { flex: none; display: flex; align-items: center; gap: var(--s2); }
+@keyframes fade-in { from { opacity: 0; transform: translateY(-4px); } }
+
+.theme-switch {
+  position: relative; display: grid; grid-template-columns: 1fr 1fr;
+  width: 104px; height: 30px; padding: 0; overflow: hidden;
+  border: 2px solid var(--line); background: var(--field); cursor: pointer;
+  box-shadow: 2px 2px 0 var(--line);
+  transition: transform .12s var(--ease), box-shadow .12s var(--ease);
+}
+.theme-switch:hover { transform: translate(-1px, -1px); box-shadow: 3px 3px 0 var(--line); }
+.theme-switch:active { transform: translate(2px, 2px); box-shadow: 0 0 0 var(--line); }
+/* Same clean sliding highlight as the page-tab indicator. */
+.theme-switch .ts-thumb {
+  position: absolute; top: 0; bottom: 0; left: 0; width: 50%; background: var(--btn);
+  transition: transform .45s var(--ease);
+}
+.theme-switch[aria-checked="true"] .ts-thumb { transform: translateX(100%); }
+.theme-switch .ts-opt {
+  position: relative; z-index: 1; display: grid; place-items: center; font-size: 10px;
+  font-weight: 500; letter-spacing: .1em; text-transform: uppercase;
+  transition: color .3s ease;
+}
+.theme-switch[aria-checked="false"] .ts-opt:nth-child(1),
+.theme-switch[aria-checked="true"] .ts-opt:nth-child(2) { color: var(--on-btn); }
+
+.help-link {
+  display: inline-flex; align-items: center; height: 30px; padding: 0 var(--s3);
+  border: 2px solid var(--line); box-shadow: 2px 2px 0 var(--line); background: transparent;
+  font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; text-decoration: none; color: var(--ink);
+  transition: transform .12s var(--ease), box-shadow .12s var(--ease), background-color .15s ease;
+}
+.help-link:hover { background: var(--sand); transform: translate(-1px, -1px); box-shadow: 3px 3px 0 var(--line); }
+.help-link:active { transform: translate(2px, 2px); box-shadow: 0 0 0 var(--line); }
+
+/* Tabs: 40 px. The active tab's number is set in a vermilion seal, like a hanko. */
+.tabs { position: relative; flex: none; display: grid; grid-template-columns: repeat(4, 1fr); height: 40px; border-bottom: 1.5px solid var(--line); }
+.tab {
+  position: relative; display: flex; align-items: center; justify-content: center; gap: 6px;
+  height: 100%; padding: 0 var(--s1); border: 0; background: none; cursor: pointer;
+  color: var(--muted); font-size: 10px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase;
+}
+.tab:hover { color: var(--ink); }
+.tab[aria-selected="true"] { color: var(--ink); font-weight: 700; background: var(--tab-active); }
+.seal {
+  display: grid; place-items: center; width: 18px; height: 18px;
+  border: 1.5px solid currentColor; font-size: 10px; font-weight: 700;
+}
+.tab[aria-selected="true"] .seal { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.tab-bar {
+  position: absolute; left: 0; bottom: -2px; width: 25%; height: 3px; background: var(--accent);
+  transform: translateX(calc(var(--i, 0) * 100%)); transition: transform .45s var(--ease);
+}
+.badge { position: absolute; top: 6px; right: 6px; min-width: 16px; height: 16px; padding: 0 3px; background: var(--warn); color: var(--paper); font-size: 9px; font-weight: 700; line-height: 16px; text-align: center; }
+.badge.has-error { background: var(--accent); color: var(--on-accent); }
+.badge.bump { animation: bump .4s var(--ease); }
+@keyframes bump { 0% { transform: scale(1); } 40% { transform: scale(1.35); } 100% { transform: scale(1); } }
+
+/* Pages: one visible at a time. Longer pages (Tools) scroll within the fixed popup. */
+.pages { position: relative; flex: 1; min-height: 0; overflow: hidden; }
+.page {
+  position: absolute; inset: 0; padding: var(--s4) var(--s4) var(--s5);
+  overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain;
+  scrollbar-width: thin; scrollbar-color: var(--rule) transparent;
+  opacity: 0; visibility: hidden; transform: translateX(-16px);
+  transition: transform .45s var(--ease), opacity .3s ease, visibility 0s linear .45s;
+}
+.page::-webkit-scrollbar { width: 6px; }
+.page::-webkit-scrollbar-thumb { background: var(--rule); }
+.page::-webkit-scrollbar-track { background: transparent; }
+.page.is-active { opacity: 1; visibility: visible; transform: none; transition: transform .45s var(--ease), opacity .3s ease, visibility 0s; }
+.page.enter-next { transform: translateX(26px); }
+.page.enter-prev { transform: translateX(-26px); }
+
+/* Groups and labels. A label carries a hairline that runs to the edge, like a card heading. */
+.group { margin-bottom: 16px; }
+.group:last-child { margin-bottom: 0; }
+/* Breathing room after the OUTPUT receipt before the OPTIONS group. */
+.receipt + .group { margin-top: 12px; }
+.label {
+  display: flex; align-items: center; gap: var(--s2); height: 18px; margin-bottom: 10px;
+  font-size: 10px; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: var(--muted);
+}
+.label::after { content: ""; flex: 1; height: 1px; background: var(--rule); }
+.field { display: block; min-width: 0; }
+.flabel { display: block; height: 18px; margin-bottom: 6px; font-size: 10px; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.hint { margin: var(--s1) 0 0; font-size: 10.5px; font-weight: 300; color: var(--muted); }
+.hint:empty { display: none; }
+input[type="text"] {
+  display: block; width: 100%; height: 36px; padding: 0 10px;
+  border: 2px solid var(--line); background: var(--field); color: var(--ink);
+  font-size: 14px; font-weight: 700; font-variant-numeric: tabular-nums;
+  transition: border-color .2s ease, box-shadow .2s ease;
+}
+input[type="text"]:hover { border-color: var(--accent); }
+input[type="text"]:focus-visible { outline: none; border-color: var(--indigo); box-shadow: inset 0 0 0 1px var(--indigo); }
+[aria-invalid="true"] { border-color: var(--accent) !important; box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent) !important; }
+
+.size-row { display: grid; grid-template-columns: 1fr 36px 1fr; gap: var(--s2); align-items: end; }
+.swap {
+  display: grid; place-items: center; width: 36px; height: 36px; margin: 0; padding: 0;
+  border: 2px solid var(--line); background: transparent; cursor: pointer;
+  box-shadow: 2px 2px 0 var(--line);
+  transition: transform .12s var(--ease), box-shadow .12s var(--ease), background-color .15s ease;
+}
+.swap:hover { background: var(--sand); transform: translate(-1px, -1px); box-shadow: 3px 3px 0 var(--line); }
+.swap:active { transform: translate(2px, 2px); box-shadow: 0 0 0 var(--line); }
+.swap svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.6; }
+.swap.spin svg { animation: spin .45s var(--ease); }
+@keyframes spin { to { transform: rotate(180deg); } }
+
+/* Viewfinder: the chosen shape inside four corner marks, like a camera's frame guide. */
+/* Two explicit rows: the shape and the readout can never overlap, whatever the size. */
+.viewfinder {
+  position: relative; display: grid; grid-template-rows: minmax(0, 1fr) 18px;
+  align-items: center; justify-items: center; height: 96px; padding: 6px 8px 8px;
+  background: var(--field); border: 2px solid var(--line); box-shadow: 3px 3px 0 var(--line);
+}
+.viewfinder .c { position: absolute; width: 12px; height: 12px; border: 0 solid var(--line); }
+.viewfinder .tl { top: 6px; left: 6px; border-top-width: 2px; border-left-width: 2px; }
+.viewfinder .tr { top: 6px; right: 6px; border-top-width: 2px; border-right-width: 2px; }
+.viewfinder .bl { bottom: 6px; left: 6px; border-bottom-width: 2px; border-left-width: 2px; }
+.viewfinder .br { bottom: 6px; right: 6px; border-bottom-width: 2px; border-right-width: 2px; }
+#ratio-shape {
+  grid-row: 1;
+  display: block; width: 40px; height: 40px; border: 2px solid var(--accent);
+  background: color-mix(in srgb, var(--accent) 18%, transparent);
+  transition: width .5s var(--ease), height .5s var(--ease);
+}
+.viewfinder.flash #ratio-shape { animation: flash .5s var(--ease); }
+@keyframes flash { 0% { background: color-mix(in srgb, var(--accent) 50%, transparent); } 100% { background: color-mix(in srgb, var(--accent) 18%, transparent); } }
+
+/* Readout inside the viewfinder: the output size and megapixels, centred at the bottom. */
+.readout {
+  grid-row: 2; width: 100%; display: flex; align-items: center; justify-content: center;
+  gap: var(--s1); height: 18px; font-size: 11px; font-weight: 500;
+  white-space: nowrap; font-variant-numeric: tabular-nums;
+}
+#est-px:not(:empty)::before { content: ""; display: inline-block; flex: none; width: 7px; height: 7px; margin-right: var(--s1); background: var(--accent); }
+
+/* Output receipt on page 2: the exact result, in a bordered tag. */
+.receipt { display: grid; align-content: center; gap: 1px; height: 52px; margin: var(--s3) 0 4px; padding: 6px var(--s3); border: 2px solid var(--line); background: var(--field); box-shadow: 3px 3px 0 var(--line); }
+.receipt-k { font-size: 9px; font-weight: 500; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); }
+.receipt-v { font-size: 14px; font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* Page 2: density, format and quality share one row; the two options share one line. */
+.row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: var(--s2); }
+.check-row { display: flex; align-items: center; gap: var(--s4); }
+
+/* Tools page: a calm list of switches with room to breathe. */
+.tools-intro { margin: 0 0 var(--s3); color: var(--muted); font-size: 10.5px; line-height: 1.4; }
+#page-3 .hint { margin-top: 2px; }
+.tool-list { display: grid; gap: 10px; }
+.tool-row {
+  display: flex; align-items: center; gap: var(--s3);
+  min-height: 40px; padding: 9px var(--s3) 9px 12px; background: var(--field);
+  border: 2px solid var(--line); box-shadow: 3px 3px 0 var(--line);
+  cursor: pointer;
+  transition: background .25s var(--ease), border-color .25s var(--ease),
+              transform .2s var(--ease), box-shadow .2s var(--ease);
+}
+.tool-row:hover:not(:has(input:checked)) { background: var(--select-hover); transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--line); }
+.tool-row:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--line); }
+.tool-row:has(input:checked) { background: var(--select); border-color: var(--accent); box-shadow: 3px 3px 0 var(--accent); }
+.tool-row:has(input:focus-visible) { outline: 2px solid var(--indigo); outline-offset: 3px; }
+.tool-copy { display: grid; gap: 3px; min-width: 0; }
+.tool-copy b { font-size: 11.5px; font-weight: 700; letter-spacing: .01em; }
+.tool-copy small { color: var(--muted); font-size: 9px; line-height: 1.35; }
+#page-3 .group { margin-bottom: var(--s4); }
+html[data-motion="off"] .tool-row { transition: none; }
+@media (prefers-reduced-motion: reduce) { .tool-row { transition: none; } }
+
+/* Dropdown: the native select stays in the page; this button and its animated list are what you see. */
+.dd-source { position: absolute !important; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+.group { position: relative; }
+.dd-button {
+  position: relative; display: flex; align-items: center; justify-content: space-between; gap: var(--s2);
+  width: 100%; height: 36px; padding: 0 var(--s3);
+  border: 2px solid var(--line); background: var(--field);
+  font-size: 13px; font-weight: 500; text-align: left; cursor: pointer;
+  box-shadow: 2px 2px 0 var(--line);
+  transition: transform .12s var(--ease), box-shadow .12s var(--ease), border-color .2s ease;
+}
+.dd-button:hover:not(:disabled) { border-color: var(--indigo); transform: translate(-1px, -1px); box-shadow: 3px 3px 0 var(--line); }
+.dd-button[aria-expanded="true"] { border-color: var(--indigo); transform: translate(2px, 2px); box-shadow: 0 0 0 var(--line); }
+.dd-button:disabled { opacity: .5; cursor: not-allowed; box-shadow: none; }
+.dd-button::after {
+  content: ""; flex: none; width: 0; height: 0;
+  border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 6px solid currentColor;
+  transition: transform .3s var(--ease);
+}
+.dd-button[aria-expanded="true"]::after { transform: rotate(180deg); }
+.dd-value { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.dd-panel {
+  position: fixed; z-index: 50; display: flex; flex-direction: column; overflow-y: auto; overscroll-behavior: contain;
+  padding: var(--s1) 0;
+  border: 2px solid var(--line); background: var(--paper); box-shadow: 4px 4px 0 var(--line);
+  clip-path: inset(0 0 100% 0); opacity: 0; transform: translateY(-6px);
+  transition: clip-path .32s var(--ease), opacity .2s ease, transform .32s var(--ease);
+}
+.dd-panel[data-side="up"] { clip-path: inset(100% 0 0 0); transform: translateY(6px); }
+.dd-panel.is-open { clip-path: inset(0 0 0 0); opacity: 1; transform: none; }
+.dd-group { padding: var(--s2) var(--s3) var(--s1); font-size: 9px; font-weight: 500; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+.dd-option {
+  position: relative; display: flex; align-items: center; min-height: 32px; padding: 0 var(--s3);
+  font-size: 12px; font-weight: 500; cursor: pointer;
+  transition: background-color .15s ease, padding .25s var(--ease), color .15s ease;
+}
+.dd-option::before {
+  content: ""; position: absolute; left: 0; top: 6px; bottom: 6px; width: 3px; background: var(--indigo);
+  transform: scaleY(0); transition: transform .25s var(--ease);
+}
+.dd-option.is-active { background: var(--select); padding-left: var(--s4); }
+.dd-option.is-active::before, .dd-option[aria-selected="true"]::before { transform: scaleY(1); background: var(--accent); }
+.dd-option[aria-selected="true"] { font-weight: 700; color: var(--accent-ink); background: var(--select-hover); }
+.dd-option[aria-disabled="true"] { opacity: .38; cursor: not-allowed; }
+.dd-panel.is-open .dd-option { animation: opt-in .36s var(--ease) both; animation-delay: calc(var(--i, 0) * 22ms + 50ms); }
+@keyframes opt-in { from { opacity: 0; transform: translateX(-10px); } }
+
+/* Segmented control for the capture mode. */
+.segmented { position: relative; display: grid; grid-template-columns: repeat(4, 1fr); height: 42px; border: 2px solid var(--line); box-shadow: 2px 2px 0 var(--line); }
+.segmented label { position: relative; z-index: 1; }
+.segmented input { position: absolute; opacity: 0; pointer-events: none; }
+.segmented span {
+  display: flex; align-items: center; justify-content: center; height: 40px; cursor: pointer;
+  font-size: 9px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; transition: color .3s ease;
+}
+.segmented label:hover span { color: var(--indigo); }
+.segmented label:has(input:checked) span { color: var(--on-btn); }
+.segmented label:has(input:focus-visible) span { outline: 2px solid var(--indigo); outline-offset: -4px; }
+.segmented .thumb {
+  position: absolute; top: 0; bottom: 0; left: 0; z-index: 0;
+  width: var(--thumb-w, 50%); transform: translateX(var(--thumb-x, 0px));
+  background: var(--btn);
+  transition: transform .42s cubic-bezier(.2, .9, .25, 1.2), width .42s cubic-bezier(.2, .9, .25, 1.2);
+}
+.segmented.squish .thumb { animation: squish-x .36s var(--ease); }
+@keyframes squish-x { 0% { scale: 1 1; } 40% { scale: 1.12 .86; } 100% { scale: 1 1; } }
+
+.check { display: flex; align-items: center; gap: var(--s2); height: 28px; font-size: 11.5px; cursor: pointer; }
+
+/* Custom square checkbox: the native input stays for keyboard and form semantics. */
+.check input[type="checkbox"], .tool-row input[type="checkbox"] {
+  appearance: none; -webkit-appearance: none;
+  position: relative; flex: none; width: 18px; height: 18px; margin: 0;
+  border: 2px solid var(--line); background: var(--field); box-shadow: 2px 2px 0 var(--line);
+  cursor: pointer;
+  transition: transform .12s var(--ease), box-shadow .12s var(--ease), background-color .18s ease, border-color .18s ease;
+}
+.check input[type="checkbox"]:hover:not(:disabled),
+.tool-row input[type="checkbox"]:hover:not(:disabled) { background: var(--sand); transform: translate(-1px, -1px); box-shadow: 3px 3px 0 var(--line); }
+.check input[type="checkbox"]:active:not(:disabled),
+.tool-row input[type="checkbox"]:active:not(:disabled) { transform: translate(2px, 2px); box-shadow: 0 0 0 var(--line); }
+.check input[type="checkbox"]:checked,
+.tool-row input[type="checkbox"]:checked { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.check input[type="checkbox"]:checked::after,
+.tool-row input[type="checkbox"]:checked::after {
+  content: ""; position: absolute; left: 4px; top: 1px; width: 5px; height: 9px;
+  border: solid currentColor; border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+  animation: check-pop .26s var(--ease) both;
+}
+.check input[type="checkbox"]:focus-visible,
+.tool-row input[type="checkbox"]:focus-visible { outline: 2px solid var(--indigo); outline-offset: 3px; }
+.check input[type="checkbox"]:disabled,
+.tool-row input[type="checkbox"]:disabled { opacity: .45; cursor: not-allowed; box-shadow: none; }
+@keyframes check-pop { from { transform: rotate(45deg) scale(0); opacity: 0; } to { transform: rotate(45deg) scale(1); opacity: 1; } }
+
+/* Buttons. Hard shadow at rest; the button sinks into it when pressed. */
+.ghost, .btn-row button {
+  position: relative; height: 36px; padding: 0 var(--s3);
+  border: 2px solid var(--line); background: transparent; cursor: pointer;
+  font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+  box-shadow: 2px 2px 0 var(--line);
+  transition: transform .12s var(--ease), box-shadow .12s var(--ease), background-color .15s ease;
+}
+.ghost:hover:not(:disabled), .btn-row button:hover:not(:disabled) { background: var(--sand); transform: translate(-1px, -1px); box-shadow: 3px 3px 0 var(--line); }
+.ghost:active:not(:disabled), .btn-row button:active:not(:disabled) { transform: translate(2px, 2px); box-shadow: 0 0 0 var(--line); }
+.ghost:disabled, .btn-row button:disabled { opacity: .45; cursor: not-allowed; box-shadow: none; }
+.btn-row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s2); }
+
+
+/* Console page */
+.console-tools { display: flex; justify-content: flex-end; align-items: center; gap: var(--s2); height: 40px; margin-bottom: var(--s2); }
+.log-empty { margin: var(--s2) 0; font-size: 11px; font-weight: 300; color: var(--muted); }
+.log-empty[hidden] { display: none; }
+.log {
+  display: flex; flex-direction: column; gap: 2px;
+  margin: var(--s2) 0 0; padding: var(--s2); overflow-y: auto; list-style: none;
+  border: 2px solid var(--line); background: var(--sand);
+  font-size: 10.5px;
+}
+.log-row { display: grid; grid-template-columns: 56px 44px 1fr; gap: 6px; padding: 3px 0; border-bottom: 1px dashed var(--rule); animation: row-in .3s var(--ease) both; }
+.log-row time { color: var(--muted); }
+.log-tag { font-weight: 700; }
+.log-text { overflow-wrap: anywhere; }
+.level-progress .log-tag { color: var(--muted); }
+.level-success .log-tag { color: var(--ok); }
+.level-warn .log-tag { color: var(--warn); }
+.level-error .log-tag { color: var(--accent-ink); }
+@keyframes row-in { from { opacity: 0; transform: translateX(-6px); } }
+
+/* Footer: the capture button stays visible on every page. */
+.footer { flex: none; padding: 10px var(--s4) 12px; border-top: 2px solid var(--line); background: var(--paper); }
+.primary {
+  position: relative; display: flex; align-items: center; justify-content: center;
+  width: 100%; height: 44px; margin: 0;
+  border: 2px solid var(--line); background: var(--btn); color: var(--on-btn); cursor: pointer;
+  font-size: 13px; font-weight: 700; letter-spacing: .24em; text-transform: uppercase;
+  box-shadow: 4px 4px 0 var(--accent);
+  transition: transform .12s var(--ease), box-shadow .12s var(--ease), background-color .2s ease;
+}
+.primary:hover:not(:disabled) { transform: translate(-1px, -1px); box-shadow: 5px 5px 0 var(--accent); }
+.primary:active:not(:disabled) { transform: translate(4px, 4px); box-shadow: 0 0 0 var(--accent); }
+.primary:disabled { cursor: progress; }
+.btn-label { width: 100%; text-align: center; }
+.primary.is-running { background: color-mix(in srgb, var(--btn) 70%, var(--paper)); }
+.primary.shake { animation: shake .42s steps(6) both; }
+@keyframes shake { 0%, 100% { transform: translateX(0); } 20% { transform: translateX(-5px); } 40% { transform: translateX(5px); } 60% { transform: translateX(-3px); } 80% { transform: translateX(2px); } }
+
+.progress { display: grid; grid-template-columns: repeat(6, 1fr); gap: var(--s1); margin-top: var(--s2); height: 6px; }
+.progress span { border: 1px solid var(--line); background: var(--sand); transition: background-color .3s ease; }
+.progress span[data-on="true"] { background: var(--accent); }
+.status { display: flex; align-items: center; justify-content: center; gap: var(--s2); height: 14px; margin: 6px 0 0; font-size: 10px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.tick { display: none; width: 14px; height: 14px; overflow: visible; }
+.tick polyline { fill: none; stroke: var(--ok); stroke-width: 2.5; stroke-linecap: square; stroke-dasharray: 22; stroke-dashoffset: 22; }
+.status.is-done .tick { display: block; }
+.status.is-done .tick polyline { animation: draw .45s ease-out .1s forwards; }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+
+.ripple { position: absolute; pointer-events: none; transform: scale(0); background: color-mix(in srgb, var(--indigo) 30%, transparent); animation: ripple .6s ease-out forwards; }
+@keyframes ripple { to { transform: scale(1); opacity: 0; } }
+
+/* The console page is a column, so the log takes the space the toolbar leaves. */
+#page-3 { display: flex; flex-direction: column; }
+#page-3 .log { flex: 1; min-height: 0; height: auto; margin: var(--s2) 0 0; }
+.primary, .ghost { overflow: hidden; }
+.ghost.bump { animation: bump .4s var(--ease); }

@@ -1,0 +1,13 @@
+node_modules/
+dist/
+bun.lock
+coverage/
+*.log
+.DS_Store
+.e2e-popup-profile/
+.e2e-extension-profile/
+playwright-report/
+test-results/
+*.zip
+RELEASE-ZIP-GUIDE.txt
+CHANGELOG.md

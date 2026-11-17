@@ -1,0 +1,76 @@
+THIRD-PARTY LICENCES AND ATTRIBUTIONS
+=====================================
+
+This file lists every third-party component used to build, test or run Spectra
+Capture, together with its licence. The project's own source is Apache 2.0 (see
+LICENSE and NOTICE). Third-party components are NOT relicensed by this project.
+
+--------------------------------------------------------------------------------
+BUNDLED IN THE EXTENSION (present in dist/)
+--------------------------------------------------------------------------------
+
+1. Inter 4.001 variable font — Latin subset (fonts/inter-latin-variable.woff2)
+   Copyright 2016 The Inter Project Authors (https://github.com/rsms/inter)
+   Licence: SIL Open Font License 1.1
+   Full text: licenses/INTER_OFL-1.1.txt (also copied into each build as
+   fonts/OFL-1.1-Inter.txt). Source: https://fonts.google.com/specimen/Inter
+   The OFL permits bundling and redistribution with the extension; the font is
+   not modified beyond subsetting by Google Fonts, and the licence and copyright
+   notices are shipped with it.
+
+--------------------------------------------------------------------------------
+BUILD / DEVELOPMENT DEPENDENCIES (not shipped inside the extension)
+--------------------------------------------------------------------------------
+
+2. Bun — build tool and test runner (https://bun.sh)
+   Licence: MIT. Used via `bun install`, `bun run build`, `bun test`.
+   Not distributed as part of the extension.
+
+3. TypeScript — compiler and type checker (https://www.typescriptlang.org)
+   Licence: Apache 2.0. Package: typescript 5.9.3.
+
+4. @types/bun / bun-types — type definitions
+   Licence: MIT. Package: @types/bun 1.4.4.
+
+5. @types/chrome — Chrome extension API type definitions
+   Licence: MIT. Package: @types/chrome 0.3.7.
+
+6. @types/node, undici-types, @types/har-format — transitive type definitions
+   Licence: MIT. Pulled in by the packages above.
+
+7. Playwright — browser automation for tests (https://playwright.dev)
+   Licence: Apache 2.0. Package: playwright 1.65.1 (includes playwright-core).
+   Used only by development/tests/playwright. The downloaded Chromium browser is governed
+   by its own Google Chromium licence and is not redistributed with this project.
+
+--------------------------------------------------------------------------------
+INSPIRATION ONLY — NO CODE OR ASSETS USED
+--------------------------------------------------------------------------------
+
+8. React Bits (https://reactbits.dev, DavidHDev/react-bits)
+   Licence: MIT + Commons Clause. Ideas such as spotlight cards and staggered
+   text informed the original CSS/TS motion layer in src/ui/. No source code from React Bits was copied, and no React is used.
+   Commons Clause is respected: the components are not sold or redistributed.
+
+9. Motion / Framer Motion (https://motion.dev)
+   Licence: MIT. Read as reference for timing and easing ideas only. No code used.
+
+10. Radiant shaders (https://radiant-shaders.com)
+    MIT-licensed shader gallery. Read as reference for the calm header shader;
+    the shader in src/popup/backdrop.ts is original code. No shader source copied.
+
+11. Design writing (Japanese minimal / ma, japandi, neo-brutalist and Swiss UI
+    essays at utsubo.com, neubrutalism.com, onething.design, superdesign.dev)
+    Commentary and inspiration only, not code. Specific decisions are recorded
+    with sources in docs/RESEARCH.md.
+
+--------------------------------------------------------------------------------
+LICENCE COMPATIBILITY NOTE
+--------------------------------------------------------------------------------
+
+Apache 2.0 is permissive and compatible with the MIT and SIL OFL 1.1 licences of
+the components above. The additional Apache obligations are met by shipping
+this project's LICENSE, the NOTICE file, and this attribution file. The OFL font
+licence is reproduced alongside the font in every built extension. Apache 2.0
+adds an explicit patent grant and a NOTICE requirement compared with the
+project's former MIT licence; it does not add copyleft.

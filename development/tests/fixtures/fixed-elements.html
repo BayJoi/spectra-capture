@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Fixture: fixed and sticky elements</title>
+<style>
+body{margin:0;font-family:system-ui,sans-serif;background:#f4ebd8;color:#3b2415}
+header.fixed{position:fixed;top:0;left:0;right:0;height:56px;background:#3b2415;color:#fbf7ee;display:flex;align-items:center;padding:0 20px;font-weight:800;z-index:5}
+nav.sticky{position:sticky;top:0;height:44px;background:#c2412d;color:#fbf7ee;display:flex;align-items:center;padding:0 20px;font-weight:800;z-index:4}
+main{padding:120px 20px 40px}
+.block{height:260px;margin-bottom:20px;border-radius:18px;background:#fbf7ee;border:1.5px solid #3b2415;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800}
+</style>
+</head>
+<body>
+<header class="fixed">Fixed header (position: fixed)</header>
+<main>
+<nav class="sticky">Sticky navigation (position: sticky)</nav>
+<div class="block">Block 1</div><div class="block">Block 2</div><div class="block">Block 3</div>
+<div class="block">Block 4</div><div class="block">Block 5</div><div class="block">Block 6</div>
+</main>
+</body>
+</html>

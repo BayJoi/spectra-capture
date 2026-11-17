@@ -1,0 +1,106 @@
+/* Motion layer: transform / opacity / custom properties only. Loaded after the page styles. */
+:root { --ease-spring: cubic-bezier(.2, .9, .25, 1.25); }
+
+/* Buttons use the hard-shadow hover states in their own stylesheets. No magnetic transform here:
+   fractional-pixel pointer tracking blurred labels on hover and fought those shadow states. */
+
+/* A light sweep across primary actions. Hosts must clip it or the highlight escapes. */
+.primary, .cta, #save-size { overflow: hidden; }
+.primary::after, .cta::after, #save-size::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 2;
+  background: linear-gradient(105deg, transparent 34%, var(--shimmer) 50%, transparent 66%);
+  transform: translateX(-120%); transition: transform .75s var(--ease);
+}
+.primary:hover::after, .cta:hover::after, #save-size:hover::after { transform: translateX(120%); }
+
+/* Spotlight on framed cards. */
+[data-spotlight] { position: relative; overflow: hidden; }
+[data-spotlight]::before {
+  content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none; opacity: 0;
+  background: radial-gradient(260px circle at var(--mx, 50%) var(--my, 50%), color-mix(in srgb, var(--accent) 8%, transparent), transparent 68%);
+  transition: opacity .35s ease;
+}
+[data-spotlight]:hover::before { opacity: 1; }
+[data-spotlight] > * { position: relative; z-index: 1; }
+
+/* Dealt-in reveal for the guide. */
+[data-reveal] {
+  opacity: 0; transform: translateY(12px);
+  transition: opacity .38s var(--ease), transform .38s var(--ease);
+  transition-delay: calc(var(--i, 0) * 35ms);
+}
+[data-reveal].is-in { opacity: 1; transform: none; }
+
+/* Hero entrance, dealt once on load. */
+[data-enter] > * {
+  animation: enter-up .75s var(--ease) both;
+  animation-delay: calc(var(--i, 0) * 95ms);
+}
+@keyframes enter-up { from { opacity: 0; transform: translateY(22px); } }
+
+/* Progress cells shimmer while active. */
+.progress span[data-on="true"] { position: relative; overflow: hidden; }
+.progress span[data-on="true"]::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .5), transparent);
+  transform: translateX(-100%); animation: cell-shine 1.9s ease-in-out infinite;
+}
+@keyframes cell-shine { 60%, 100% { transform: translateX(100%); } }
+
+/* Viewfinder: breathing corners and a slow scan line. */
+.viewfinder .c { animation: corner-breathe 3.4s ease-in-out infinite; }
+.viewfinder::after {
+  content: ""; position: absolute; left: 8px; right: 8px; top: 8px; height: 1px; pointer-events: none;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  opacity: .45; animation: scan 4.6s linear infinite;
+}
+@keyframes corner-breathe { 50% { opacity: .45; } }
+@keyframes scan { from { transform: translateY(0); } to { transform: translateY(84px); } }
+
+/* The active seal stamps in. */
+.tab[aria-selected="true"] .seal { animation: seal-pop .45s var(--ease-spring); }
+@keyframes seal-pop { 0% { transform: scale(.6) rotate(-8deg); } 60% { transform: scale(1.12) rotate(3deg); } }
+
+/* A soft focus pulse on text fields. */
+input[type="text"]:focus-visible { animation: focus-pulse 1.7s ease-in-out infinite alternate; }
+@keyframes focus-pulse { to { box-shadow: inset 0 0 0 1px var(--indigo), 0 0 0 4px color-mix(in srgb, var(--indigo) 14%, transparent); } }
+
+/* Guide: TOC, reading bar, mascot parallax and back-to-top nudge. */
+html { scroll-behavior: smooth; scroll-padding-top: 84px; }
+.toc a[aria-current="true"] { animation: toc-in .42s var(--ease-spring); }
+@keyframes toc-in { from { transform: translateX(-6px); opacity: .4; } }
+.reading-bar { overflow: hidden; }
+.reading-bar::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .55), transparent);
+  transform: translateX(-100%); animation: bar-shine 2.6s linear infinite;
+}
+@keyframes bar-shine { 70%, 100% { transform: translateX(100%); } }
+.hero-logo { animation: float-parallax 6s ease-in-out infinite alternate; }
+@keyframes float-parallax {
+  from { transform: translateY(calc(var(--parallax, 0px) - 5px)); }
+  to { transform: translateY(calc(var(--parallax, 0px) + 5px)); }
+}
+.foot a:hover { display: inline-block; animation: nudge .55s ease-in-out infinite alternate; }
+@keyframes nudge { to { transform: translateX(4px); } }
+
+/* Framed guide sections. */
+.guide {
+  position: relative; padding: 32px var(--s4); margin-bottom: var(--s5);
+  border: 2px solid var(--line); background: color-mix(in srgb, var(--paper) 92%, transparent);
+  box-shadow: 5px 5px 0 var(--line);
+}
+.guide::before {
+  content: ""; position: absolute; top: -2px; left: 24px; right: 24px; height: 4px; background: var(--accent);
+}
+.guide h2 { margin-bottom: var(--s4); }
+.guide[data-reveal].is-in .seal { animation: seal-pop .5s var(--ease-spring) .12s both; }
+.guide .steps li::before { transition: transform .25s var(--ease-spring), background-color .2s ease; }
+.guide .steps li:hover::before { transform: translateX(3px); }
+.toc a { background-image: linear-gradient(var(--accent), var(--accent)); background-size: 0 2px; background-repeat: no-repeat; background-position: 0 100%; transition: background-size .3s var(--ease), color .2s ease, padding .3s var(--ease); }
+.toc a:hover { background-size: 100% 2px; }
+.note { animation: note-in .6s var(--ease) both; }
+@keyframes note-in { from { opacity: 0; transform: translateX(-8px); } }
+
+[data-motion="off"] html, :root[data-motion="off"] html { scroll-behavior: auto; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }

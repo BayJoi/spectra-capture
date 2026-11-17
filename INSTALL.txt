@@ -1,0 +1,234 @@
+SPECTRA CAPTURE 0.7.1 - INSTALL GUIDE
+=====================================
+
+Spectra Capture is a free browser extension for Chromium browsers (Chrome, Edge,
+Brave, Vivaldi, Opera, Helium 116 or newer). It saves a picture of the page you
+are on, at a size you choose. It works locally: no picture, page or setting is
+ever sent over the network.
+
+This project was written entirely by AI assistants. There is no human-written
+source code in it. It is a fun experimental project, shared as a trial.
+
+
+CHOOSE ONE OF TWO WAYS TO INSTALL
+---------------------------------
+
+1) USER BUILD (RECOMMENDED - no tools needed)
+   Always get the newest version from the latest-release link:
+       https://github.com/BayJoi/spectra-capture/releases/latest
+   That page opens the newest release. Download the zip attached there,
+   unzip it, and go straight to "LOAD IT IN YOUR BROWSER" below.
+   The zip contains only the finished "dist" folder. No Bun, no coding tools
+   and no downloads of dependencies are needed. No version number to look up.
+
+2) BUILD IT YOURSELF FROM SOURCE
+   You only need Bun. There are two source builds:
+     - USER build    - builds and validates dist/. No Playwright, no bun install.
+     - DEVELOPER build - adds Playwright, unit tests, browser tests and screenshots.
+   Both are described below. If you just want to use the extension, use option 1.
+
+
+INSTALL BUN (only needed for option 2)
+--------------------------------------
+Use Bun 1.2 or newer from https://bun.com/. Bun is the only runtime this
+project uses. There is no Node.js or npm step. Bun is a single dependency-free
+executable, builds the extension with no extra packages, and is faster and
+safer for this project than a Node toolchain.
+
+Check that it works:
+    bun --version
+
+macOS and Linux:
+    curl -fsSL https://bun.com/install | bash
+  Linux needs unzip (sudo apt install unzip); kernel 5.6 or higher is recommended.
+  If "bun" is not found, add ~/.bun/bin to your PATH and restart the terminal.
+
+Windows (PowerShell):
+    powershell -c "irm bun.sh/install.ps1|iex"
+  Requires Windows 10 version 1809 or newer. If "bun" is not recognised, add
+  %USERPROFILE%\.bun\bin to your user PATH and restart the terminal.
+
+PORTABLE BUN (no installer, no administrator rights):
+  Download the zip for your system from https://github.com/oven-sh/bun/releases,
+  extract it, and call the binary directly. Nothing is installed system-wide.
+    Windows:    .\bun-windows-x64\bun.exe --version
+    macOS:      ./bun-darwin-arm64/bun --version   (Apple Silicon)
+    Linux:      ./bun-linux-x64/bun --version
+  Replace "bun" with the full path to that binary in every command below.
+
+
+BUILD FROM SOURCE - USER BUILD (default)
+----------------------------------------
+Open a terminal in the project folder (the folder that contains package.json):
+
+    git clone https://github.com/BayJoi/spectra-capture.git spectra-capture
+    cd spectra-capture
+    bun run build:user
+
+That creates ONE folder:  dist/   (Manifest V3 - Chromium)
+
+"bun run build:user" needs NO "bun install", NO node_modules and NO Playwright.
+It was verified to work on a fresh copy of the source with no dependencies
+installed. "bun run build" is an alias for the same build step.
+
+Useful user commands:
+    bun run build:user       Build and validate dist/ (default, no dependencies)
+    bun run build            Same build step (alias)
+    bun scripts/validate.ts  Re-check an existing dist/ folder
+
+
+BUILD FROM SOURCE - DEVELOPER BUILD (with Playwright)
+-----------------------------------------------------
+Use this only if you want to run the browser tests or regenerate screenshots.
+Playwright is a development dependency. It is NEVER bundled into the extension
+and is not needed for daily use or for the user build.
+
+    bun install       installs TypeScript, types and Playwright
+    bun run build:dev typecheck + unit tests + build + validation + Playwright
+                      suites + screenshot regeneration
+
+Individual developer commands:
+    bun run check            typecheck + unit tests + build
+    bun test                 unit tests only
+    bun run e2e:pw           real-browser message-flow check
+    bun run e2e:pw:popup     popup UI, tabs, ARIA and live regions
+    bun run e2e:pw:guide     guide page, images, reveal and theme
+    bun run e2e:pw:picker    picker cleanup, motion and selection checks
+    bun run screenshots:pw   regenerate every screenshot (also updates dist/)
+
+PLAYWRIGHT - DO YOU NEED IT?
+  For daily use or a user build: NO.
+  It is used only by development/tests/playwright/ to check the UI in a real
+  Chromium and to generate the documentation screenshots. The extension itself
+  captures images with the browser's built-in chrome.debugger API. The two
+  release flavours are therefore:
+    USER build      - dist/ only, or the prebuilt zip; no Playwright at all.
+    DEVELOPER build - the full source plus bun install, Playwright and the
+                      test/screenshot commands listed above.
+
+ABOUT bun.lock
+  bun.lock pins the developer dependency versions so builds are reproducible.
+  It is NOT needed for the user build or for the built zip, and it is not
+  shipped in the prebuilt release. If it is missing, "bun install" recreates
+  it. Keeping it in the developer source is recommended.
+
+
+LOAD IT IN YOUR BROWSER
+-----------------------
+1. Open your browser's extensions page, for example chrome://extensions
+2. Turn on Developer mode (usually a switch in the top-right corner).
+3. Click "Load unpacked".
+4. Choose the dist folder (either from the unzipped release or the one you built).
+
+For other Chromium browsers, use their own extensions page:
+   Edge:     edge://extensions
+   Brave:    brave://extensions
+   Vivaldi:  vivaldi://extensions
+   Opera:    opera://extensions
+   Helium:   helium://extensions
+The steps are the same: Developer mode on, Load unpacked, select dist.
+
+
+TAKE YOUR FIRST PICTURE
+-----------------------
+1. Open a normal web page (address starts with http:// or https://). Local
+   development servers such as localhost and 127.0.1 work too.
+2. Click the Spectra Capture icon. The popup opens on page 1, SIZE.
+3. Pick a preset, or type a width and height.
+4. On page 2 you can also choose Area (drag a rectangle) or Element
+   (pick one button, card or section). Press CAPTURE, then choose on the page.
+5. On page 3, SETTINGS, you can set a delay, dark mode, hide sticky elements,
+   Save As, clipboard copy, annotation, save notifications and the picker
+   timeout (off by default, so picking never expires). Picker motion follows
+   the Motion switch on page 2.
+6. A "debugging" banner appears for a moment. Leave it alone.
+7. Your browser's "ask where to save" setting is respected. A system
+   notification confirms the saved file unless you turned notifications off
+   on page 3.
+8. Your picture is in your Downloads folder (or where you chose to save it).
+
+The popup has four pages:
+  1 SIZE    - preset, width/height, swap button, aspect ratio, viewfinder
+  2 OUTPUT  - visible/full page/area/element, density, format, quality, options
+  3 SETTINGS- delay, dark mode, sticky elements, Save As, clipboard, annotate,
+              notifications, picker timeout
+  4 CONSOLE - every step and problem in plain words, with Copy and Clear
+
+
+WHAT CAN BE CAPTURED
+--------------------
+Any http:// or https:// page works, including localhost, 127.0.0.1 and local
+network addresses. Browser internal pages (chrome://, the New Tab page,
+settings), extension pages, web stores and file:// pages cannot be captured.
+
+
+IF SOMETHING GOES WRONG
+-----------------------
+- Capture does not start: the page must be http:// or https://. Browser pages,
+  web stores, extension pages and file:// pages cannot be captured.
+- "Another debugger is open": close DevTools on that tab and try again.
+- "A browser policy blocks this": your organisation restricts debugging.
+- Nothing happens: open page 4, CONSOLE, to see what the extension reported.
+- Problems are shown in the Console, not as extension pop-ups.
+
+
+UPDATING
+--------
+After changing source code, run "bun run build:user" again, then on the
+extensions page click the reload button for the loaded extension.
+
+
+CLEAN REINSTALL
+---------------
+To start over with either a system-installed or portable Bun, delete ONLY these
+generated items. Do not delete the source folders (src, scripts, public, docs,
+development, assets, brand, licenses).
+
+  node_modules/   installed dev dependencies - recreated by "bun install"
+  dist/           generated extension - recreated by a build
+  bun.lock        optional lockfile - recreated by "bun install" (delete only
+                  if you want dependency versions re-resolved)
+
+Delete exactly those three items with a specific command - never a wildcard.
+
+  macOS / Linux:
+      rm -rf node_modules dist bun.lock
+
+  Windows (PowerShell):
+      Remove-Item -Recurse -Force node_modules, dist, bun.lock -ErrorAction SilentlyContinue
+
+  Windows Command Prompt (cmd.exe):
+      rmdir /s /q node_modules dist
+      del bun.lock
+
+  NOTE: Get-ChildItem, Remove-Item, Select-String and Compress-Archive are
+  PowerShell commands. If you are in cmd.exe (the plain C:\> prompt), use the
+  cmd.exe lines above or open PowerShell from the Start menu.
+
+NEVER run "rm -rf *" or "Remove-Item *" in the project folder: that would erase
+src, docs/screenshots, licenses and the other source folders. The build COPIES
+those into dist; it never moves or deletes them. If a source file is missing,
+"bun run build:user" now stops with a clear preflight error instead of building
+something broken. To check your source is complete before building, confirm
+docs/screenshots contains PNG files and licenses contains both
+INTER_OFL-1.1.txt and THIRD_PARTY_LICENSES.txt.
+
+Then, in the project folder:
+
+  User build (no dependencies needed):
+      bun run build:user
+
+  Developer build:
+      bun install
+      bun run build:dev
+
+If you did delete a source folder, restore it from the source archive. Do NOT
+try to recover it from dist - dist contains only generated copies.
+
+Finally, in the browser: open chrome://extensions, click Remove on Spectra
+Capture, then Load unpacked and select the fresh dist folder. Preferences are
+stored by the browser per extension, so use the Reset button in the popup if
+you also want default settings.
+
+
+More detail: README.md and docs/. Thank you for trying Spectra Capture.

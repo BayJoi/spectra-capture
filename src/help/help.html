@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en" data-theme="light" data-motion="on">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Spectra Capture · Guide</title>
+    <link rel="stylesheet" href="tokens.css" />
+    <link rel="stylesheet" href="button.css" />
+    <link rel="stylesheet" href="help.css" />
+    <link rel="stylesheet" href="motion.css" />
+  </head>
+  <body>
+    <div class="reading-bar" id="reading-bar" aria-hidden="true"></div>
+
+    <header class="topbar">
+      <a class="brand" href="#top"><img src="brand/spectra-mark.svg" data-brand="spectra-mark" alt="" width="30" height="30" /><span>Spectra Capture <em>guide</em></span></a>
+      <button type="button" class="theme-switch" id="theme-toggle" role="switch" aria-checked="false" aria-label="Switch to dark theme">
+        <span class="ts-opt">Light</span>
+        <span class="ts-opt">Dark</span>
+        <span class="ts-thumb" aria-hidden="true"></span>
+      </button>
+    </header>
+
+    <div class="layout" id="top">
+      <aside class="toc" aria-label="Guide sections">
+        <p class="toc-title">Contents</p>
+        <nav>
+          <a href="#start"><b>01</b>Quick start</a>
+          <a href="#pages"><b>02</b>The four pages</a>
+          <a href="#size"><b>03</b>Size and density</a>
+          <a href="#ratio"><b>04</b>Aspect ratio</a>
+          <a href="#limits"><b>05</b>Full page and limits</a>
+          <a href="#area"><b>06</b>Area and element</a>
+          <a href="#tools"><b>07</b>Settings</a>
+          <a href="#console"><b>08</b>Console</a>
+          <a href="#looks"><b>09</b>Themes and motion</a>
+          <a href="#banner"><b>10</b>The debugger banner</a>
+          <a href="#browsers"><b>11</b>Browsers</a>
+        </nav>
+      </aside>
+
+      <main class="content">
+        <section class="hero">
+          <img class="hero-logo" src="brand/spectra-mascot.svg" data-brand="spectra-mascot" alt="The Spectra Capture mascot: a cat inside a camera lens" />
+          <div>
+            <p class="eyebrow">Version 0.7.1 · English only for now</p>
+            <h1>Take a picture of any web page, at any size.</h1>
+            <p class="lead">Spectra Capture saves a picture of the page you are on. You choose the shape. The picture goes to your Downloads folder.</p>
+            <a class="cta" href="#start">Start the guide</a>
+          </div>
+        </section>
+
+        <section class="guide" id="start">
+          <h2><span class="seal">01</span>Quick start</h2>
+          <ol class="steps">
+            <li><span>Open a normal web page. Its address starts with <code>http://</code> or <code>https://</code> — local development servers such as <code>localhost</code> and <code>127.0.0.1</code> work too.</span></li>
+            <li><span>Click the Spectra Capture icon in the toolbar.</span></li>
+            <li><span>On page 1, pick a preset or type a width and height.</span></li>
+            <li><span>Press <strong>CAPTURE</strong> at the bottom. A banner may appear briefly. Leave it alone.</span></li>
+            <li><span>Find the picture in your Downloads folder.</span></li>
+          </ol>
+          <p class="note">Any <code>http://</code> or <code>https://</code> page works, including local development servers (<code>localhost</code>, <code>127.0.0.1</code>) and addresses on your local network. Browser pages such as <code>chrome://</code> or <code>about:</code>, extension pages and <code>file://</code> pages are refused.</p>
+          <figure class="shot-wide"><img src="screenshots/capture-button.png" alt="The CAPTURE button at the bottom of the popup" loading="lazy" /><figcaption>Capture</figcaption></figure>
+        </section>
+
+        <section class="guide" id="pages">
+          <h2><span class="seal">02</span>The four pages</h2>
+          <p>The popup is split into four pages, so everything fits without scrolling. Use the tabs at the top — the selected tab is highlighted with a warm wash, and its page number is a vermilion seal. The capture button stays at the bottom on every page.</p>
+          <dl class="pages">
+            <div><dt>1 · Size</dt><dd>The preset list, the width and height, the swap button, and the aspect ratio with its viewfinder.</dd></div>
+            <div><dt>2 · Output</dt><dd>Visible, full page, area or element, pixel density, format, JPEG quality, options, and your saved sizes.</dd></div>
+            <div><dt>3 · Settings</dt><dd>Delay, dark mode, sticky elements, Save As, clipboard, annotation, save notifications and the picker timeout.</dd></div>
+            <div><dt>4 · Console</dt><dd>Every step and every problem, in plain words. The number on the tab counts warnings and errors.</dd></div>
+          </dl>
+          <div class="shot-grid">
+            <figure><img src="screenshots/popup-size.png" alt="The Size page of the Spectra Capture popup" loading="lazy" /><figcaption>Size</figcaption></figure>
+            <figure><img src="screenshots/popup-output.png" alt="The Output page of the Spectra Capture popup" loading="lazy" /><figcaption>Output</figcaption></figure>
+            <figure><img src="screenshots/popup-settings.png" alt="The Settings page of the Spectra Capture popup" loading="lazy" /><figcaption>Settings</figcaption></figure>
+            <figure><img src="screenshots/popup-console.png" alt="The Console page of the Spectra Capture popup" loading="lazy" /><figcaption>Console</figcaption></figure>
+          </div>
+        </section>
+
+        <section class="guide" id="size">
+          <h2><span class="seal">03</span>Size and pixel density</h2>
+          <p>Width and height are in <strong>CSS pixels</strong>. That is the size the page is drawn at. Pixel density multiplies it. For example, 1440 × 900 at 2× saves a 2880 × 1800 picture. Your screen does not change.</p>
+          <p>Presets come in three groups. <strong>Display</strong> holds a single Monitor option that detects your screen's resolution when you open the popup and adds it at 1× density — pick it to capture at the size you actually see. <strong>Devices</strong> are phones, tablets and laptops. <strong>Resolutions</strong> use 1× density, so the picture size matches its name; 4K UHD saves 3840 × 2160 pixels. The usual density controls still work with any preset.</p>
+          <p class="note">Densities that are too large for your size are greyed out in the list. The hint under the list gives the highest one that works. In Full page mode the estimate assumes a tall page, so combinations that would certainly blow the pixel budget are greyed out too.</p>
+          <div class="shot-grid">
+            <figure><img src="screenshots/size-controls.png" alt="Width, height and the swap button" loading="lazy" /><figcaption>Size fields</figcaption></figure>
+            <figure><img src="screenshots/viewfinder.png" alt="The viewfinder showing the chosen shape" loading="lazy" /><figcaption>Viewfinder</figcaption></figure>
+            <figure><img src="screenshots/output-controls.png" alt="Density, format and JPEG quality controls" loading="lazy" /><figcaption>Output controls</figcaption></figure>
+          </div>
+        </section>
+
+        <section class="guide" id="ratio">
+          <h2><span class="seal">04</span>Aspect ratio and the swap button</h2>
+          <p>Pick a ratio such as 16:9. Then typing a width changes the height, and typing a height changes the width. The frame on page 1 shows the shape.</p>
+          <p>The swap button turns a portrait size into a landscape one, and the other way round.</p>
+          <figure class="shot-wide"><img src="screenshots/ratio-dropdown.png" alt="The aspect ratio dropdown" loading="lazy" /><figcaption>Aspect ratio</figcaption></figure>
+        </section>
+
+
+        <section class="guide" id="limits">
+          <h2><span class="seal">05</span>Full page and limits</h2>
+          <p><strong>Full page</strong> captures the whole height of the page. Very tall pages are captured in slices and stitched together locally, so height is no longer the limit it once was.</p>
+          <p>Pictures above 40 million pixels ask you to confirm first. The limit is 100 million pixels in total; these limits are not final. The Output receipt shows an estimate before you start.</p>
+          <figure class="shot-wide"><img src="screenshots/receipt.png" alt="The output receipt showing the exact picture size" loading="lazy" /><figcaption>Output receipt</figcaption></figure>
+        </section>
+
+        <section class="guide" id="area">
+          <h2><span class="seal">06</span>Area and element capture</h2>
+          <p>Choose <strong>Area</strong> on page 2, then press CAPTURE. The popup closes and a dimmed overlay appears on the page. Drag a rectangle over the part you want; it is captured at your chosen density. Press Escape to cancel.</p>
+          <p>Choose <strong>Element</strong> to snap to one thing on the page — a button, image, card or section. Move the pointer and a coloured box follows the element under it; click to capture. The overlay is removed before the picture is taken, so it never appears in the image.</p>
+          <div class="shot-grid">
+            <figure><img src="screenshots/area-selection.png" alt="Dragging a rectangle over a page with the area picker" loading="lazy" /><figcaption>Area selection</figcaption></figure>
+            <figure><img src="screenshots/element-selection.png" alt="A coloured box highlighting one element on the page" loading="lazy" /><figcaption>Element selection</figcaption></figure>
+          </div>
+          <p class="note">Nothing is sent anywhere. Selection uses an overlay drawn on the page, and the page is never changed by the extension.</p>
+        </section>
+
+        <section class="guide" id="tools">
+          <h2><span class="seal">07</span>Settings</h2>
+          <p>Page 3 holds the finishing touches. <strong>Delay</strong> waits 3, 5 or 10 seconds before capture, so you can open a menu or hover state. <strong>Dark mode for capture</strong> asks the site for its dark colour scheme. <strong>Hide sticky elements</strong> removes repeating headers and footers from full-page pictures.</p>
+          <p><strong>Ask where to save</strong> shows the browser's Save As dialog. <strong>Copy to clipboard</strong> opens a small page that copies the picture after saving. <strong>Annotate before saving</strong> opens a drawing editor in a new tab, where you can add arrows, boxes, highlights and blur before saving the result.</p>
+          <p><strong>Save notifications</strong> shows a system notification when a screenshot finishes saving. It is on by default; turn it off here if you would rather not see it. The picture still saves either way.</p>
+          <p><strong>Motion effects</strong> on page 2 also controls the Area and Element pickers. While you pick, the corner brackets pulse together and a small accent square travels around the whole selection — two continuous, lightweight loops. Both overlays fade in and out, and the Element highlight glides softly when a bigger element changes to a smaller one (or back). Turn Motion off for a still, instant highlight. The overlay always uses the same light or dark colours as this popup, including its hard offset shadow.</p>
+          <p><strong>Picker timeout</strong> is off by default, so an Area or Element pick waits for you instead of expiring after 60 seconds. Turn it on if you would rather have it give up automatically; press Escape at any time to cancel.</p>
+          <div class="shot-grid">
+            <figure><img src="screenshots/popup-settings.png" alt="The Settings page with delay and the first capture options" loading="lazy" /><figcaption>Settings · top</figcaption></figure>
+            <figure><img src="screenshots/popup-settings-bottom.png" alt="The Settings page scrolled to the clipboard, notifications and overlay options" loading="lazy" /><figcaption>Settings · bottom</figcaption></figure>
+          </div>
+        </section>
+
+        <section class="guide" id="console">
+          <h2><span class="seal">08</span>Console</h2>
+          <p>Page 4 lists each step and any problem in plain words. Nothing is shown as a pop-up message. Use Copy to copy the list, or Clear to empty it.</p>
+          <figure class="shot-wide"><img src="screenshots/console-tools.png" alt="The Copy and Clear buttons on the Console page" loading="lazy" /><figcaption>Console tools</figcaption></figure>
+        </section>
+
+
+        <section class="guide" id="looks">
+          <h2><span class="seal">09</span>Themes and motion</h2>
+          <p>The switch at the top changes between light and dark. The popup and this guide remember the choice.</p>
+          <p>Motion effects can be turned off in the popup's Output page under Options. They also turn off when the computer asks for reduced motion.</p>
+          <div class="shot-grid">
+            <figure><img src="screenshots/theme-switch.png" alt="The light and dark theme switch in light mode" loading="lazy" /><figcaption>Light switch</figcaption></figure>
+            <figure><img src="screenshots/theme-switch-dark.png" alt="The light and dark theme switch in dark mode" loading="lazy" /><figcaption>Dark switch</figcaption></figure>
+            <figure><img src="screenshots/options-checkboxes.png" alt="The custom scroll and motion checkboxes" loading="lazy" /><figcaption>Options</figcaption></figure>
+          </div>
+        </section>
+
+        <section class="guide" id="banner">
+          <h2><span class="seal">10</span>The debugger banner and privacy</h2>
+          <p>Chromium shows a banner while a capture runs. It says that this extension started debugging the browser. The browser shows it for your safety, and it cannot be hidden.</p>
+          <p>Spectra Capture works on your computer only. It does not send your pictures, your pages, or your settings anywhere.</p>
+        </section>
+
+        <section class="guide" id="browsers">
+          <h2><span class="seal">11</span>Browsers</h2>
+          <p>Spectra Capture is built for Chromium browsers version 116 or newer: Chrome, Edge, Brave, Vivaldi, Opera and Helium. It uses the browser's debugger API to set an exact virtual viewport and capture at any pixel density.</p>
+          <p>Open a normal web page first — browser pages such as the New Tab page cannot be captured. Your browser's "ask where to save" setting is respected, and a system notification confirms each save unless you switch it off on the Settings tab. Spectra Capture works on your computer only: no network calls, no remote code, and no page content in logs.</p>
+        </section>
+
+        <footer class="foot">
+          <a href="#top">Back to top</a>
+          <p>Spectra Capture 0.7.1 · Apache 2.0 licence · Inter, OFL 1.1</p>
+        </footer>
+      </main>
+    </div>
+
+    <script type="module" src="help.js"></script>
+  </body>
+</html>

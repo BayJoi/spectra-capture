@@ -1,0 +1,210 @@
+/* Copy page. Colours, the one typeface and the sharp rule come from tokens.css. */
+
+/* Entrance is dealt by motion.css via [data-enter]; stagger the children with --i. */
+[data-enter] > :nth-child(1) { --i: 0; }
+[data-enter] > :nth-child(2) { --i: 1; }
+[data-enter] > :nth-child(3) { --i: 2; }
+[data-enter] > :nth-child(4) { --i: 3; }
+[data-enter] > :nth-child(5) { --i: 4; }
+
+body {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: var(--s5);
+  font-size: 13px;
+  line-height: 1.5;
+  background-color: var(--bg);
+  background-image:
+    linear-gradient(to right, var(--lattice) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--lattice) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+
+/* The frame: washi paper inside a 2px ink border with a hard offset shadow and a shu rule. */
+.frame {
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+  padding: var(--s5);
+  border: 2px solid var(--line);
+  background-color: color-mix(in srgb, var(--paper) 96%, transparent);
+  box-shadow: 8px 8px 0 var(--line);
+}
+.frame::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: var(--accent); }
+
+.masthead {
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+  padding-bottom: var(--s4);
+  margin-bottom: var(--s4);
+  border-bottom: 2px solid var(--line);
+}
+.mark { flex: none; width: 34px; height: 34px; }
+.mark img { display: block; width: 100%; height: 100%; }
+.heading { flex: 1; min-width: 0; }
+.heading h1 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+.heading .sub { margin: 2px 0 0; font-size: 11.5px; font-weight: 300; color: var(--muted); }
+.seal {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 30px;
+  border: 2px solid var(--accent);
+  background: var(--accent);
+  color: var(--on-accent);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .08em;
+}
+
+/* Preview: the image sits in a bordered field with camera-style corner marks. */
+.preview { margin-bottom: var(--s4); }
+.preview-inner {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 120px;
+  max-height: 240px;
+  padding: var(--s3);
+  overflow: hidden;
+  border: 2px solid var(--line);
+  background: var(--field);
+  box-shadow: 4px 4px 0 var(--line);
+}
+.preview-inner::before,
+.preview-inner::after {
+  content: "";
+  position: absolute;
+  top: 8px;
+  bottom: 8px;
+  width: 12px;
+  pointer-events: none;
+  border: 0 solid var(--line);
+}
+.preview-inner::before { left: 8px; border-left-width: 2px; border-top-width: 2px; border-bottom-width: 2px; }
+.preview-inner::after { right: 8px; border-right-width: 2px; border-top-width: 2px; border-bottom-width: 2px; }
+#thumb {
+  display: block;
+  max-width: 100%;
+  max-height: 190px;
+  height: auto;
+  object-fit: contain;
+  image-rendering: auto;
+}
+#thumb[hidden] { display: none; }
+.preview-meta {
+  position: absolute;
+  left: 24px;
+  bottom: 6px;
+  margin: 0;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.preview-meta:empty { display: none; }
+
+/* Toast-like status panel. State styles drive the icon and colour. */
+.status-panel {
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+  padding: var(--s3) var(--s4);
+  border: 2px solid var(--line);
+  background: var(--sand);
+  box-shadow: 3px 3px 0 var(--line);
+  margin-bottom: var(--s4);
+}
+.status-icon { flex: none; width: 24px; height: 24px; }
+.status-icon svg { width: 100%; height: 100%; overflow: visible; }
+.status-icon .i-tick,
+.status-icon .i-cross { display: none; }
+.status-title { margin: 0; font-size: 13px; font-weight: 700; letter-spacing: .04em; }
+.status-detail { margin: 2px 0 0; font-size: 11.5px; font-weight: 300; color: var(--muted); }
+.status-detail:empty { display: none; }
+
+.i-spinner circle {
+  fill: none;
+  stroke: var(--muted);
+  stroke-width: 2.5;
+  stroke-linecap: square;
+  stroke-dasharray: 14 8;
+  transform-origin: center;
+  animation: spin 1s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.i-tick polyline { fill: none; stroke: var(--ok); stroke-width: 2.5; stroke-linecap: square; stroke-dasharray: 22; stroke-dashoffset: 22; }
+.i-cross path { fill: none; stroke: var(--accent); stroke-width: 2.5; stroke-linecap: square; }
+
+.status-panel[data-state="success"] { background: color-mix(in srgb, var(--ok) 10%, var(--field)); }
+.status-panel[data-state="success"] .i-spinner,
+.status-panel[data-state="success"] .i-cross { display: none; }
+.status-panel[data-state="success"] .i-tick { display: block; animation: tick-in .4s var(--ease) both; }
+.status-panel[data-state="success"] .i-tick polyline { animation: draw .45s ease-out .12s forwards; }
+.status-panel[data-state="success"] .status-title { color: var(--ok); }
+
+.status-panel[data-state="error"] { background: color-mix(in srgb, var(--accent) 10%, var(--field)); }
+.status-panel[data-state="error"] .i-spinner,
+.status-panel[data-state="error"] .i-tick { display: none; }
+.status-panel[data-state="error"] .i-cross { display: block; animation: tick-in .4s var(--ease) both; }
+.status-panel[data-state="error"] .status-title { color: var(--accent-ink); }
+
+@keyframes tick-in { from { opacity: 0; transform: scale(.6); } }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+
+/* Options: custom square checkbox, matching the popup. */
+.options { margin-bottom: var(--s4); }
+.hint { margin: var(--s2) 0 0 26px; font-size: 10.5px; font-weight: 300; color: var(--muted); }
+
+.check { display: flex; align-items: center; gap: var(--s2); min-height: 28px; font-size: 12px; cursor: pointer; }
+.check input[type="checkbox"] {
+  appearance: none; -webkit-appearance: none;
+  position: relative; flex: none; width: 18px; height: 18px; margin: 0;
+  border: 2px solid var(--line); background: var(--field); box-shadow: 2px 2px 0 var(--line);
+  cursor: pointer;
+  transition: transform .12s var(--ease), box-shadow .12s var(--ease), background-color .18s ease;
+}
+.check input[type="checkbox"]:hover { background: var(--sand); transform: translate(-1px, -1px); box-shadow: 3px 3px 0 var(--line); }
+.check input[type="checkbox"]:active { transform: translate(2px, 2px); box-shadow: 0 0 0 var(--line); }
+.check input[type="checkbox"]:checked { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.check input[type="checkbox"]:checked::after {
+  content: ""; position: absolute; left: 4px; top: 1px; width: 5px; height: 9px;
+  border: solid currentColor; border-width: 0 2px 2px 0; transform: rotate(45deg);
+}
+
+/* Actions: the shared primary and ghost buttons, with hard shadows and a sinking press. */
+.actions { display: grid; grid-template-columns: 1fr auto; gap: var(--s3); padding-top: var(--s4); border-top: 2px solid var(--line); }
+.ghost, .primary {
+  position: relative; overflow: hidden; height: 40px; padding: 0 var(--s4);
+  border: 2px solid var(--line); cursor: pointer;
+  font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+  transition: transform .12s var(--ease), box-shadow .12s var(--ease), background-color .15s ease;
+}
+.ghost { background: transparent; color: var(--ink); box-shadow: 3px 3px 0 var(--line); }
+.ghost:hover:not(:disabled) { background: var(--sand); transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--line); }
+.ghost:active:not(:disabled) { transform: translate(3px, 3px); box-shadow: 0 0 0 var(--line); }
+.primary {
+  display: flex; align-items: center; justify-content: center;
+  background: var(--btn); color: var(--on-btn); box-shadow: 4px 4px 0 var(--accent);
+}
+.primary:hover:not(:disabled) { transform: translate(-1px, -1px); box-shadow: 5px 5px 0 var(--accent); }
+.primary:active:not(:disabled) { transform: translate(4px, 4px); box-shadow: 0 0 0 var(--accent); }
+.ghost:disabled, .primary:disabled { opacity: .5; cursor: not-allowed; box-shadow: none; }
+.btn-label { display: block; width: 100%; text-align: center; }
+
+@media (max-width: 560px) {
+  .frame { padding: var(--s4); }
+  .actions { grid-template-columns: 1fr; }
+}

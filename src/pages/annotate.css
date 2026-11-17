@@ -1,0 +1,205 @@
+/* Annotate page. Colours, the one typeface and the sharp rule come from tokens.css. */
+
+html, body { height: 100%; }
+body {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  font-size: 12.5px;
+  line-height: 1.4;
+  background-color: var(--bg);
+  background-image:
+    linear-gradient(to right, var(--lattice) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--lattice) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+
+/* Each band deals in from the top on load; motion.css owns the keyframes, --i staggers them. */
+.app { display: flex; flex-direction: column; flex: 1; min-height: 0; }
+.app > :nth-child(1) { --i: 0; }
+.app > :nth-child(2) { --i: 1; }
+.app > :nth-child(3) { --i: 2; }
+.app > :nth-child(4) { --i: 3; }
+
+/* Masthead */
+.masthead {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+  height: 58px;
+  padding: 0 var(--s4);
+  border-bottom: 2px solid var(--line);
+  background: var(--paper);
+  position: relative;
+}
+.masthead::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: var(--accent); }
+.mark { flex: none; width: 30px; height: 30px; }
+.mark img { display: block; width: 100%; height: 100%; }
+.heading { flex: 1; min-width: 0; }
+.heading h1 { margin: 0; font-size: 14px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+.heading .sub { margin: 2px 0 0; font-size: 11px; font-weight: 300; color: var(--muted); }
+
+/* Compact theme switch, matching the popup and guide. */
+.theme-switch {
+  position: relative; display: grid; grid-template-columns: 1fr 1fr;
+  flex: none; width: 104px; height: 30px; padding: 0; overflow: hidden;
+  border: 2px solid var(--line); background: var(--field); cursor: pointer;
+  box-shadow: 2px 2px 0 var(--line);
+  transition: transform .12s var(--ease), box-shadow .12s var(--ease);
+}
+.theme-switch:hover { transform: translate(-1px, -1px); box-shadow: 3px 3px 0 var(--line); }
+.theme-switch:active { transform: translate(2px, 2px); box-shadow: 0 0 0 var(--line); }
+/* Same clean sliding highlight as the page-tab indicator. */
+.theme-switch .ts-thumb {
+  position: absolute; top: 0; bottom: 0; left: 0; width: 50%; background: var(--btn);
+  transition: transform .45s var(--ease);
+}
+.theme-switch[aria-checked="true"] .ts-thumb { transform: translateX(100%); }
+.theme-switch .ts-opt {
+  position: relative; z-index: 1; display: grid; place-items: center; font-size: 9px;
+  font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+  transition: color .3s ease;
+}
+.theme-switch[aria-checked="false"] .ts-opt:nth-child(1),
+.theme-switch[aria-checked="true"] .ts-opt:nth-child(2) { color: var(--on-btn); }
+
+/* Toolbar: wraps cleanly, each group visually separated by an ink divider. */
+.toolbar {
+  flex: none;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s3);
+  padding: var(--s3) var(--s4);
+  border-bottom: 2px solid var(--line);
+  background: color-mix(in srgb, var(--paper) 94%, transparent);
+}
+.tool-group, .ctl-group, .action-group { display: flex; align-items: center; flex-wrap: wrap; gap: var(--s2); }
+.divider { flex: none; width: 1px; height: 34px; background: var(--rule); }
+
+/* Tool button: icon over a small caption. Active state uses the indigo/select tokens. */
+.tool {
+  display: grid;
+  justify-items: center;
+  gap: 3px;
+  min-width: 52px;
+  padding: 5px 6px 4px;
+  border: 2px solid transparent;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transition: color .18s ease, background-color .18s ease, border-color .18s ease, box-shadow .12s var(--ease), transform .12s var(--ease);
+}
+.tool-icon { display: grid; place-items: center; width: 20px; height: 20px; }
+.tool-icon svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: square; stroke-linejoin: miter; }
+.tool-label { font-size: 9px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+.tool:hover { color: var(--ink); background: var(--select-hover); }
+.tool[aria-pressed="true"] {
+  color: var(--ink);
+  background: var(--select);
+  border-color: var(--indigo);
+  box-shadow: 2px 2px 0 var(--indigo);
+}
+.tool[aria-pressed="true"] .tool-icon svg { stroke: var(--accent-ink); }
+
+/* Stroke width */
+.stroke-control { display: flex; align-items: center; gap: var(--s2); height: 34px; }
+.ctl-label { font-size: 9px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.stroke-control input[type="range"] {
+  width: 96px; height: 18px; margin: 0; accent-color: var(--accent); cursor: pointer; background: transparent;
+}
+.stroke-control output {
+  min-width: 34px; font-size: 10px; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--ink);
+}
+
+/* Colour swatches: one per ink, square, with a visible ring when active. */
+.swatches { display: flex; flex-wrap: wrap; gap: 6px; }
+.swatch {
+  width: 20px; height: 20px; padding: 0;
+  border: 2px solid var(--line); background: var(--swatch); cursor: pointer;
+  box-shadow: 2px 2px 0 var(--line);
+  transition: transform .12s var(--ease), box-shadow .12s var(--ease), outline-color .15s ease;
+}
+.swatch:hover { transform: translate(-1px, -1px); box-shadow: 3px 3px 0 var(--line); }
+.swatch:active { transform: translate(2px, 2px); box-shadow: 0 0 0 var(--line); }
+.swatch[aria-pressed="true"] { outline: 2px solid var(--indigo); outline-offset: 2px; }
+.swatch[data-swatch="ink"] { --swatch: var(--ink); }
+.swatch[data-swatch="vermilion"] { --swatch: var(--accent); }
+.swatch[data-swatch="indigo"] { --swatch: var(--indigo); }
+.swatch[data-swatch="white"] { --swatch: #ffffff; }
+.swatch[data-swatch="black"] { --swatch: #000000; }
+.swatch[data-swatch="highlight"] { --swatch: #f5d200; }
+
+/* Shared button base — defined locally because button.css only adds the enhancement layer. */
+.ghost, .primary {
+  position: relative; overflow: hidden; height: 34px; padding: 0 var(--s3);
+  border: 2px solid var(--line); cursor: pointer;
+  font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+  transition: transform .12s var(--ease), box-shadow .12s var(--ease), background-color .15s ease;
+}
+.ghost { display: inline-flex; align-items: center; gap: 6px; background: transparent; color: var(--ink); box-shadow: 2px 2px 0 var(--line); }
+.ghost:hover:not(:disabled) { background: var(--sand); transform: translate(-1px, -1px); box-shadow: 3px 3px 0 var(--line); }
+.ghost:active:not(:disabled) { transform: translate(2px, 2px); box-shadow: 0 0 0 var(--line); }
+.primary {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  background: var(--btn); color: var(--on-btn); box-shadow: 3px 3px 0 var(--accent);
+}
+.primary:hover:not(:disabled) { transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--accent); }
+.primary:active:not(:disabled) { transform: translate(3px, 3px); box-shadow: 0 0 0 var(--accent); }
+.ghost:disabled, .primary:disabled { opacity: .45; cursor: not-allowed; box-shadow: none; }
+.icon-btn svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: square; stroke-linejoin: miter; }
+
+/* Stage: scrolls in both directions; the canvas keeps full pixel resolution. */
+.stage {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: var(--s5);
+  display: grid;
+  place-items: center;
+  overscroll-behavior: contain;
+}
+#canvas {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border: 2px solid var(--line);
+  box-shadow: 6px 6px 0 var(--line);
+  background: var(--field);
+  cursor: crosshair;
+  touch-action: none;
+}
+.app[data-tool="select"] #canvas { cursor: default; }
+.app[data-tool="text"] #canvas { cursor: text; }
+
+/* Footer: dimensions, status and the keyboard cheatsheet. */
+.footbar {
+  flex: none;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--s3);
+  min-height: 44px;
+  padding: var(--s2) var(--s4);
+  border-top: 2px solid var(--line);
+  background: var(--paper);
+}
+.dims, .keys { margin: 0; font-size: 10.5px; font-weight: 300; color: var(--muted); }
+.keys { margin-left: auto; letter-spacing: .04em; }
+.status { display: flex; align-items: center; gap: var(--s2); margin: 0; font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.tick { display: none; width: 14px; height: 14px; overflow: visible; }
+.tick polyline { fill: none; stroke: var(--ok); stroke-width: 2.5; stroke-linecap: square; stroke-dasharray: 22; stroke-dashoffset: 22; }
+.status.is-done { color: var(--ok); }
+.status.is-done .tick { display: block; }
+.status.is-done .tick polyline { animation: draw .45s ease-out .1s forwards; }
+.status.is-error { color: var(--accent-ink); }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+
+@media (max-width: 720px) {
+  .masthead, .toolbar, .footbar { padding-left: var(--s3); padding-right: var(--s3); }
+  .toolbar { gap: var(--s2); }
+  .divider { display: none; }
+  .keys { display: none; }
+  .stage { padding: var(--s3); }
+}
